@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.UserMapper">
+    <!--查询单个-->
+    <select id="loadUserByUsernamePassword" resultType="com.example.domain.User">
+        select id,
+               username,
+               password,
+               phone
+        from user
+        where username = #{username}
+        and password = #{password}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="getRolesByUid" resultType="com.example.domain.Role">
+        select r.id,
+               r.name,
+               r.name_zh nameZh
+        from role r,
+             user_role ur
+        where r.id = ur.rid
+          and ur.uid = #{uid}
+    </select>
+    <select id="loadUserByPhone" resultType="com.example.domain.User">
+        select *
+        from user
+        where phone = #{phone}
+    </select>
+    <update id="updatePassword">
+        update `user` set password=#{password}
+        where username=#{username}
+    </update>
+</mapper>
