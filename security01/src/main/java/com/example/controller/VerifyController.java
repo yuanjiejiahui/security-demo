@@ -21,7 +21,7 @@ public class VerifyController {
     public VerifyController(Producer producer) {
         this.producer = producer;
     }
-    @GetMapping(value = "/vc.jpg",produces = "image/jpeg")
+    @GetMapping(value = "/code",produces = "image/jpeg")
     public void getVerifyCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 定义 response 输出类型为 image/jpeg 类型
         response.setDateHeader("Expires", 0);

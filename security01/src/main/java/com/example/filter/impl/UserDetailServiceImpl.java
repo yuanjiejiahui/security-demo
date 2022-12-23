@@ -34,7 +34,7 @@ public class UserDetailServiceImpl implements UserDetailsService , UserDetailsPa
     public UserDetails loadUserByPhone(String phone)throws UsernameNotFoundException {
         User user = userMapper.loadUserByPhone(phone);
         if(!Optional.ofNullable(user).isPresent()){
-            throw new UsernameNotFoundException("此电话号未注册");
+            throw new UsernameNotFoundException("此电话号未注册: "+ phone);
         }
         List<Role> roleList = userMapper.getRolesByUid(user.getId());
         user.setRoles(roleList);

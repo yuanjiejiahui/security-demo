@@ -6,6 +6,7 @@ import com.example.domain.ResponseResult;
 import com.example.domain.User;
 import com.example.filter.UserAuthenticationToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -16,19 +17,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 public class LoginController {
     @Resource
     private AuthenticationManager authenticationManager;
     @Resource
-  private RedisCache redisCache;
+    private RedisCache redisCache;
+
     @PostMapping("/login")
-    public ResponseResult login(@RequestBody User user, HttpServletRequest request) throws JsonProcessingException {
+    public ResponseResult login(@RequestBody User user) {
+        log.info("前端传来的用户信息: {}", user);
         UserAuthenticationToken userAuthenticationToken
                 = new UserAuthenticationToken(user);
         Authentication authenticate = authenticationManager.authenticate(userAuthenticationToken);
         //是否通过
-        if(!Optional.ofNullable(authenticate).isPresent()){
+        if (!Optional.ofNullable(authenticate).isPresent()) {
             throw new RuntimeException("登录失败");
         }
         System.out.println(authenticate.getPrincipal());
@@ -39,14 +43,14 @@ public class LoginController {
         Integer id = principal.getId();
 
         //把user的信息存到redis中，userid作为key
-        redisCache.setCacheObject("login"+"_"+id,principal);
+        redisCache.setCacheObject("login" + "_" + id, principal);
 
         //通过后用userid生成一个jwt存入ResponseResult
         String jwt = JwtUtil.createJWT(String.valueOf(id));
-        Map<String,Object> map=new HashMap<>();
-        map.put("token",jwt);
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", jwt);
 
 
-        return new ResponseResult(200,"登录成功",map);
+        return new ResponseResult(200, "登录成功", map);
     }
 }

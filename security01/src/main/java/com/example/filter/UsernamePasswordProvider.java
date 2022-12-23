@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -29,8 +30,8 @@ public class UsernamePasswordProvider implements AuthenticationProvider {
                     throw new KaptchaNotMatchException("验证码不一致");
                 }
             }
-
         }
+
         UserDetails userDetails = userDetailService.loadUserByUsernamePassword(user.getUsername(),user.getPassword());
         return new UserAuthenticationToken(userDetails,userDetails.getAuthorities());
     }

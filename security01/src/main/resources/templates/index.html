@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body id="app">
+<h1>用户登录</h1>
+
+    <label>用户名:</label><input type="text" v-model="user.username"><br>
+    <label>手机号:</label><input type="text" v-model="user.phone"><br>
+    <label>密码:</label><input type="password" v-model="user.password"><br>
+    <label>验证码:</label><input type="text" v-model="user.kaptcha"><br>
+    <img th:src="@{/code}">
+    <button @click="postInfo" name="submit">登录</button>
+
+
+<div v-model="result">{{result}}</div>
+</body>
+</html>
+
+<script src="js/vue3.2.45.js"></script>
+<script src="js/vue.global.js"></script>
+<script src="js/axios1.2.1.js"></script>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                user: {
+                    username: '',
+                    phone: '',
+                    password: '',
+                    kaptcha: ''
+                },
+                result: ''
+            }
+        },
+        methods: {
+            postInfo() {
+                console.log(this.user);
+                let formData = new FormData();
+                for(let key in this.user){
+                    formData.append(key,this.user[key])
+                }
+                axios({
+                    method: 'post',
+                    url: 'http://localhost:8080/login',
+                    data: formData,
+                    headers:{
+                        "Content-Type":"application/json"
+                    }
+                }).then(res => {
+                    console.log(res.data)
+                    this.result = JSON.stringify(res.data.data)
+                }).catch(err => {
+                    console.log(err.response.data)
+                    this.result = JSON.stringify(err.response.data.msg)
+                })
+            }
+        }
+    });
+    app.mount('#app')
+</script>

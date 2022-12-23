@@ -90,9 +90,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                        });
         http
                 .authorizeRequests()
-                .mvcMatchers("/index").permitAll()
-                .mvcMatchers("/login.html").permitAll()//放行的资源一定要放在没放行的前面
-                .mvcMatchers("/vc.jpg").permitAll()
+                .antMatchers("/js/**").permitAll()
+                .mvcMatchers("/").permitAll()//放行的资源一定要放在没放行的前面
+                .mvcMatchers("/code").permitAll()
                 .mvcMatchers("/login").permitAll()
                 .mvcMatchers("/hello").authenticated()
                 .anyRequest().authenticated() // 除上述放行的url,其余全部鉴权认证

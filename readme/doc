@@ -1,0 +1,11 @@
+security01
+1.配置数据库,redis
+2.禁用浏览器缓存
+3.访问地址 http://127.0.0.1:8080
+
+
+justauth
+1. 配置redis
+2. 端口8443
+3.RestAuthController getAuthRequest()配置相关三方id,密码信息
+4. 访问地址 http://127.0.0.1:8443
