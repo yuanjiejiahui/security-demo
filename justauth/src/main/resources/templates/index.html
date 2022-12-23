@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>JustAuth第三方登录软件</title>
+    <!--    <link href="icon/iconfont.css" rel="stylesheet" type="text/css">-->
+</head>
+<script src="element-ui/index.css" type="text/css"></script>
+<script src="icon/iconfont.css" type="text/css"></script>
+
+<body>
+<div id="app">
+    <svg class="icon" aria-hidden="true">
+        <use xlink:href="#icon-gitee" @click="postOAuthByAxios('gitee')"></use>
+    </svg>
+
+    <svg class="icon" aria-hidden="true">
+        <use xlink:href="#icon-QQ" @click="postOAuthByAxios('qq')"></use>
+    </svg>
+
+    <svg class="icon" aria-hidden="true">
+        <use xlink:href="#icon-weibo" @click="postOAuthByAxios('weibo')"></use>
+    </svg>
+
+    <svg class="icon" aria-hidden="true">
+        <use xlink:href="#icon-github" @click="postOAuthByAxios('github')"></use>
+    </svg>
+
+    <svg class="icon" aria-hidden="true">
+        <use xlink:href="#icon-weixin" @click="postOAuthByAxios(weixin)"></use>
+    </svg>
+
+
+</div>
+</body>
+</html>
+
+<script src="vue3.2.45"></script>
+<script src="axios1.2.1.js"></script>
+<script src="element-ui/vue.global.js"></script>
+<script src="element-ui/elementPlus2.2.27.js"></script>
+<script src="icon/iconfont.js"></script>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+            }
+        },
+        methods: {
+            postOAuthByAxios(param) {
+                console.log(param + "被点击了!")
+                let obj = {}
+                new Promise((resolve, reject) => {
+                    axios({
+                        method: "post",
+                        url: 'http://127.0.0.1:8443/oauth/render/' + param,
+                        data: obj
+                    }).then(resp => {
+                        resolve(resp)
+                    }).catch(err => {
+                        reject(err)
+                    })
+                }).then(res => {
+                    console.log(res.data);
+                    if (res.data.code === 200) {
+                        window.location.href = res.data.data;
+                        console.log(type + "请求第三方登录：" + JSON.stringify(res));
+                    }
+                }).catch(err => {
+                    message.error('打开第三方登录失败');
+                })
+
+            }
+        }
+    });
+    app.mount('#app')
+</script>
+
+<style>
+    .icon {
+        width: 2em;
+        height: 2em;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+    }
+</style>
